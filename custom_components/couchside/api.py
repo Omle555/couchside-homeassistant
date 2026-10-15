@@ -51,6 +51,25 @@ class CouchsideClient:
         """Library totals and what is playing now."""
         return await self._request("get", "/activity")
 
+    async def item_image(self, item_id: int, kind: str) -> tuple[bytes, str] | None:
+        """`poster` or `backdrop` art of an item and its content type; None if it has none."""
+        headers = {"Authorization": f"Bearer {self.token}"} if self.token else {}
+        try:
+            async with self._session.get(
+                f"{self._base}/items/{item_id}/image/{kind}",
+                headers=headers,
+                timeout=aiohttp.ClientTimeout(total=10),
+            ) as resp:
+                if resp.status == 404:
+                    return None
+                if resp.status == 401:
+                    raise CouchsideAuthError
+                if resp.status >= 400:
+                    raise CouchsideError(f"Couchside answered {resp.status}")
+                return await resp.read(), resp.content_type or "image/jpeg"
+        except (aiohttp.ClientError, TimeoutError) as err:
+            raise CouchsideError(str(err)) from err
+
     async def _request(self, method: str, path: str, **kwargs: Any) -> dict[str, Any]:
         headers = {"Authorization": f"Bearer {self.token}"} if self.token else {}
         try:

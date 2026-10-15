@@ -12,9 +12,11 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import CouchsideConfigEntry
+from .const import DOMAIN
 from .coordinator import CouchsideCoordinator
 from .entity import CouchsideEntity
 
@@ -25,6 +27,7 @@ class CouchsideSensorDescription(SensorEntityDescription):
 
     value: Callable[[dict[str, Any]], Any]
     attributes: Callable[[dict[str, Any]], dict[str, Any]] | None = None
+    show_movie_art: bool = False
 
 
 def label(item: dict[str, Any]) -> str:
@@ -86,6 +89,7 @@ SENSORS = (
         icon="mdi:movie-open",
         value=lambda d: movies[0]["title"] if (movies := movies_playing(d)) else NOTHING_PLAYING,
         attributes=movie_attributes,
+        show_movie_art=True,
     ),
     CouchsideSensorDescription(
         key="now_playing",
@@ -145,3 +149,14 @@ class CouchsideSensor(CouchsideEntity, SensorEntity):
         if self.entity_description.attributes is None:
             return None
         return self.entity_description.attributes(self.coordinator.data)
+
+    @property
+    def entity_picture(self) -> str | None:
+        """The movie poster image, while a movie plays."""
+        if not self.entity_description.show_movie_art or not movies_playing(self.coordinator.data):
+            return None
+        image_id = er.async_get(self.hass).async_get_entity_id(
+            "image", DOMAIN, f"{self.coordinator.config_entry.unique_id}_movie_poster"
+        )
+        state = self.hass.states.get(image_id) if image_id else None
+        return state.attributes.get("entity_picture") if state else None

@@ -49,6 +49,9 @@
       "shows": { "name": "TV shows" },
       "episodes": { "name": "Episodes" }
     },
+    "image": {
+      "movie_poster": { "name": "Movie poster" }
+    },
     "binary_sensor": {
       "playing": { "name": "Playing" },
       "scanning": { "name": "Library scan" }

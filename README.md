@@ -6,6 +6,12 @@ shows **Discovered: Couchside**.
 
 ## What's new
 
+**2026-10-15: Movie art (0.3.0)**
+- New **Movie poster** image shows the backdrop (or poster, if there is no backdrop) of the movie
+  being watched. The **Movie playing** sensor uses it as its picture while a movie plays.
+- See [Dashboard card](#dashboard-card) for a card with the art as the background and the title
+  on top.
+
 **2026-10-15: Movie playing sensor (0.2.0)**
 - New **Movie playing** sensor shows the title of the movie being watched, or `Nothing playing`.
   Its attributes say who is watching, the position, runtime and percent watched, and list every
@@ -47,12 +53,35 @@ Home Assistant keeps its own Couchside session and polls every 15 seconds. If th
 |---|---|
 | Playing | On while anything is playing (handy for dimming the lights) |
 | Movie playing | Title of the movie being watched (the newest if several), or `Nothing playing`; attributes `viewer`, `position`, `runtime`, `progress` (%) and `movies` |
+| Movie poster | Backdrop (or poster) of the movie being watched; empty when no movie is playing |
 | Now playing | How many things are playing; attributes list the titles, viewers and positions |
 | Converting streams | Repackaged or converted streams currently open |
 | Movies, TV shows, Episodes | Library totals |
 | Library scan | On while a scan or metadata refresh runs |
 
-The data comes from Couchside's `GET /api/v1/activity` endpoint.
+The data comes from Couchside's `GET /api/v1/activity` endpoint. The art comes from
+`GET /api/v1/items/{id}/image/backdrop` (or `.../poster`), fetched by Home Assistant with its own
+Couchside session, so your browser never needs to reach Couchside.
+
+## Dashboard card
+
+Shows the movie art as the background with the title on top, only while a movie is playing. Edit a
+dashboard → **Add card** → **Manual**, paste this and replace `couchside` in the two entity ids
+with yours (see **Settings → Devices & services → Couchside → entities**):
+
+```yaml
+type: conditional
+conditions:
+  - condition: state
+    entity: sensor.couchside_movie_playing
+    state_not: Nothing playing
+card:
+  type: picture-entity
+  entity: sensor.couchside_movie_playing
+  image_entity: image.couchside_movie_poster
+  show_name: false
+  show_state: true
+```
 
 ## License
 
