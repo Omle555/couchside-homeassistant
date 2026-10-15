@@ -65,9 +65,10 @@ Couchside session, so your browser never needs to reach Couchside.
 
 ## Dashboard card
 
-Shows the movie art as the background with the title on top, only while a movie is playing. Edit a
-dashboard → **Add card** → **Manual**, paste this and replace `couchside` in the two entity ids
-with yours (see **Settings → Devices & services → Couchside → entities**):
+A short banner with the movie art as the background and the title on the left, centred
+vertically, only while a movie is playing. Edit a dashboard → **Add card** → **Manual**, paste this
+and replace `couchside` in the entity ids with yours (see **Settings → Devices & services →
+Couchside → entities**). Change `aspect_ratio` to make it taller (`3:1`) or shorter (`8:1`).
 
 ```yaml
 type: conditional
@@ -76,11 +77,21 @@ conditions:
     entity: sensor.couchside_movie_playing
     state_not: Nothing playing
 card:
-  type: picture-entity
-  entity: sensor.couchside_movie_playing
+  type: picture-elements
   image_entity: image.couchside_movie_poster
-  show_name: false
-  show_state: true
+  aspect_ratio: "64:9"
+  elements:
+    - type: state-label
+      entity: sensor.couchside_movie_playing
+      style:
+        top: 50%
+        left: 0
+        transform: translate(0, -50%)
+        padding: 0 20px
+        color: white
+        font-size: 24px
+        font-weight: 600
+        text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9)
 ```
 
 ## License
