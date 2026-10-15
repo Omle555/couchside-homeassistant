@@ -1,0 +1,56 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Connect to Couchside",
+        "description": "Enter the address of the PC running Couchside and a Couchside administrator account.",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "username": "Username",
+          "password": "Password"
+        }
+      },
+      "zeroconf_confirm": {
+        "title": "Couchside found on your network",
+        "description": "Sign in to Couchside on {name} ({host}) with an administrator account.",
+        "data": {
+          "username": "Username",
+          "password": "Password"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Sign in to Couchside again",
+        "description": "Home Assistant's Couchside session has ended. Sign in with an administrator account.",
+        "data": {
+          "username": "Username",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Couldn't reach Couchside. Check the address, and that Couchside is running with bind = \"0.0.0.0\".",
+      "invalid_auth": "Wrong username or password.",
+      "not_admin": "This account isn't a Couchside administrator.",
+      "outside_network": "Couchside only answers devices on its local network, and Home Assistant isn't on it."
+    },
+    "abort": {
+      "already_configured": "This Couchside server is already set up.",
+      "reauth_successful": "Signed in again."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "now_playing": { "name": "Now playing" },
+      "converting": { "name": "Converting streams" },
+      "movies": { "name": "Movies" },
+      "shows": { "name": "TV shows" },
+      "episodes": { "name": "Episodes" }
+    },
+    "binary_sensor": {
+      "playing": { "name": "Playing" },
+      "scanning": { "name": "Library scan" }
+    }
+  }
+}
