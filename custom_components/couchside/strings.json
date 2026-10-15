@@ -42,6 +42,7 @@
   },
   "entity": {
     "sensor": {
+      "movie_playing": { "name": "Movie playing" },
       "now_playing": { "name": "Now playing" },
       "converting": { "name": "Converting streams" },
       "movies": { "name": "Movies" },

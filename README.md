@@ -6,6 +6,11 @@ shows **Discovered: Couchside**.
 
 ## What's new
 
+**2026-10-15: Movie playing sensor (0.2.0)**
+- New **Movie playing** sensor shows the title of the movie being watched, or `Nothing playing`.
+  Its attributes say who is watching, the position, runtime and percent watched, and list every
+  movie playing if there's more than one.
+
 **2026-10-15: first version**
 - Discovers Couchside on the local network (mDNS, `_couchside._tcp`), signs in with a Couchside
   administrator account and adds sensors for what is playing, converting streams, library totals
@@ -41,6 +46,7 @@ Home Assistant keeps its own Couchside session and polls every 15 seconds. If th
 | Entity | What it shows |
 |---|---|
 | Playing | On while anything is playing (handy for dimming the lights) |
+| Movie playing | Title of the movie being watched (the newest if several), or `Nothing playing`; attributes `viewer`, `position`, `runtime`, `progress` (%) and `movies` |
 | Now playing | How many things are playing; attributes list the titles, viewers and positions |
 | Converting streams | Repackaged or converted streams currently open |
 | Movies, TV shows, Episodes | Library totals |
